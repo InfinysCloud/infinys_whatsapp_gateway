@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.infinys</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="Infinys Whatsapp" name="infinys_whatsapp" logo="/infinys_whatsapp_gateway/static/description/icon.png">
+                    <block title="Infinys Gateway Configuration">
+                        <setting string="API Endpoint" help="Set the base URL for the WAPI service.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="wapi_url" class="col-lg-3 o_light_label"/>
+                                    <field name="wapi_url"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="wapi_phone_number" string="Phone Number" class="col-lg-3 o_light_label"/>
+                                    <field name="wapi_phone_number" widget="phone" />
+                                </div>
+                            </div>
+                        </setting>
+                        <setting string="User Credentials" help="Enter your WAPI username and secure token.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="wapi_user" string="WAPI User" class="col-lg-3 o_light_label"/>
+                                    <field name="wapi_user"/>
+                                </div>
+                                <div class="row mt8">
+                                    <label for="wapi_token" string="WAPI Token" class="col-lg-3 o_light_label"/>
+                                    <field name="wapi_token" password="True"/>
+                                </div>
+                            </div>
+                            <div class="mt16">
+                                <button name="action_wapi_check_health" 
+                                        type="object" 
+                                        string="Check Health" 
+                                        class="btn-primary" 
+                                        icon="fa-heartbeat"/>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>
