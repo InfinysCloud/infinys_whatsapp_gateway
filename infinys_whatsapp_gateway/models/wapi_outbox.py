@@ -27,7 +27,9 @@ class WapiOutbox(models.Model):
     media_base64 = fields.Text(string="Media Base64")
     media_mime_type = fields.Char(string="Media MIME Type")
     attachment_id = fields.Many2many('ir.attachment', string="Attachment", copy=False) # keep False to avoid linking attachments; we have to copy them instead
-    
+    module_name = fields.Char(string="Module Name") # module name that sent this message like sales, purchase order, etc
+    note = fields.Text(string="Note") # any note that we want to add to this message
+
     scheduled_date = fields.Datetime(string="Scheduled Date", default=fields.Datetime.now)
     sent_date = fields.Datetime(string="Sent Date", readonly=True)
     is_queued = fields.Boolean(string="Is Queued", default=True)
@@ -56,9 +58,8 @@ class WapiOutbox(models.Model):
                 record.media_base64 = False
                 record.media_mime_type = False
  
-    def send_message_immediate(self):
+    def send_message_immediate(self):       
         for record in self:
-
             if record.hasmedia is None:
                 self.set_hasmedia()
                 
