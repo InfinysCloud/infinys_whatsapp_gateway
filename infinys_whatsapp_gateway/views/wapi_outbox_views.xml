@@ -39,6 +39,10 @@
                             <field name="is_delivered"/>
                             <field name="sent_date" readonly="1"/>
                         </group>
+                        <group name="extra_info">
+                            <field name="module_name"/>
+                            <field name="note"/>
+                        </group>
                     </group>
                     <notebook>
                         <page string="Content" name="content">
@@ -48,6 +52,7 @@
                         </page>
                         <page string="Media" name="media" invisible="not hasmedia">
                             <group>
+                                
                                 <field name="hasmedia" readonly="1"/>
                                 <field name="media_url" readonly="1"/>
                                 <field name="media_filename" readonly="1"/>
