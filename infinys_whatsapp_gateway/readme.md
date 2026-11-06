@@ -21,7 +21,9 @@ For other WhatsApp-related needs, you can use WhatsApp Blasting by Infinys Syste
 
 ## Links
 
-- Website: https://integra.isi.id/
+- Website: https://integra.infinyscloud.com
 - Odoo trial: https://kelontongan-demo.isi.id
+- Odoo trial: https://akuntaerp-trial.atisicloud.com
+- Odoo trial : https://bengkelin.atisicloud.com
   - Username: odoo-trial@isi.co.id
   - Password: odoo-trial
