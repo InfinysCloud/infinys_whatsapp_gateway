@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Infinys WhatsApp Gateway — Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;500;700;800&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --ink:        #0a1410;
+    --panel:      #0f1d17;
+    --panel-2:    #13241c;
+    --paper:      #eef4ef;
+    --muted:      #8aa79a;
+    --line:       rgba(120, 220, 170, 0.14);
+    --wa:         #25d366;   /* WhatsApp green */
+    --wa-deep:    #128c4b;
+    --gold:       #e6c878;
+    --serifish:   'Sora', sans-serif;
+    --mono:       'Spline Sans Mono', monospace;
+  }
+
+  html, body { background: var(--ink); }
+
+  .slide-deck {
+    width: 100vw; height: 100vh; overflow: hidden; position: relative;
+    background:
+      radial-gradient(1200px 600px at 80% -10%, rgba(37,211,102,0.10), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(18,140,75,0.12), transparent 55%),
+      var(--ink);
+    color: var(--paper);
+    font-family: var(--serifish);
+  }
+
+  /* subtle grain */
+  .slide-deck::after {
+    content: ""; position: fixed; inset: 0; pointer-events: none; opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .slide {
+    width: 100%; height: 100%; display: none; flex-direction: column;
+    justify-content: center; padding: 7vh 9vw; position: absolute; top: 0; left: 0;
+  }
+  .slide.active { display: flex; }
+  .slide.active > * { animation: rise 0.55s cubic-bezier(.2,.7,.2,1) backwards; }
+  .slide.active > *:nth-child(1){ animation-delay:.05s }
+  .slide.active > *:nth-child(2){ animation-delay:.13s }
+  .slide.active > *:nth-child(3){ animation-delay:.21s }
+  .slide.active > *:nth-child(4){ animation-delay:.29s }
+  .slide.active > *:nth-child(5){ animation-delay:.37s }
+  .slide.active > *:nth-child(6){ animation-delay:.45s }
+  @keyframes rise { from { opacity:0; transform: translateY(14px); } to { opacity:1; transform:none; } }
+
+  /* kicker / eyebrow */
+  .kicker {
+    font-family: var(--mono); font-size: .8rem; letter-spacing: .28em;
+    text-transform: uppercase; color: var(--wa);
+    display: inline-flex; align-items: center; gap: .6rem;
+  }
+  .kicker::before { content:""; width: 26px; height: 2px; background: var(--wa); display:inline-block; }
+
+  h1 { font-family: var(--serifish); font-weight: 800; font-size: clamp(2.6rem, 6vw, 5rem); line-height: 1.02; letter-spacing: -0.02em; }
+  h2 { font-family: var(--serifish); font-weight: 700; font-size: clamp(2rem, 4.2vw, 3.2rem); line-height: 1.08; letter-spacing: -0.015em; margin-bottom: .4rem; }
+  h3 { font-weight: 700; font-size: 1.15rem; }
+  p, li { font-weight: 300; font-size: clamp(1.05rem, 1.5vw, 1.35rem); line-height: 1.7; color: #d7e3db; }
+  strong { font-weight: 700; color: var(--paper); }
+  em { color: var(--gold); font-style: italic; }
+
+  .divider { width: 64px; height: 4px; background: linear-gradient(90deg, var(--wa), var(--wa-deep)); border-radius: 2px; margin: 1.1rem 0 1.6rem; }
+
+  ul { list-style: none; display: flex; flex-direction: column; gap: .85rem; max-width: 56ch; }
+  ul li { position: relative; padding-left: 2rem; }
+  ul li .em { font-size: 1.25rem; position: absolute; left: 0; top: .05rem; }
+  ul.plain li::before { content: "—"; position: absolute; left: 0; color: var(--wa); font-family: var(--mono); }
+
+  .lead { color: var(--muted); max-width: 60ch; font-size: clamp(1.1rem,1.6vw,1.4rem); }
+
+  /* cover */
+  .slide.cover { justify-content: center; }
+  .cover h1 { margin-top: .6rem; }
+  .cover .meta { font-family: var(--mono); color: var(--muted); font-size: .95rem; margin-top: 1.4rem; letter-spacing: .04em; }
+  .cover .glyph {
+    position: absolute; right: 7vw; top: 50%; transform: translateY(-50%);
+    width: min(34vw, 360px); aspect-ratio: 1; border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    background: linear-gradient(150deg, rgba(37,211,102,.22), rgba(18,140,75,.05));
+    border: 1px solid var(--line); display: grid; place-items: center;
+    box-shadow: 0 40px 120px rgba(37,211,102,.12);
+  }
+  .cover .glyph span { font-size: clamp(5rem, 12vw, 9rem); }
+
+  /* section divider slide */
+  .slide.section { justify-content: center; }
+  .slide.section .num { font-family: var(--mono); color: var(--wa); font-size: 1rem; letter-spacing:.2em; }
+  .slide.section h2 { font-size: clamp(2.6rem, 6vw, 4.6rem); }
+
+  /* two column */
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 4vw; align-items: center; }
+  .cols.tight { gap: 3vw; }
+
+  /* cards */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; }
+  .card {
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--line); border-radius: 16px; padding: 1.4rem 1.5rem;
+  }
+  .card .em { font-size: 1.7rem; display:block; margin-bottom:.6rem; }
+  .card h3 { margin-bottom: .3rem; }
+  .card p { font-size: 1rem; line-height: 1.55; }
+
+  /* table */
+  table { border-collapse: collapse; width: 100%; max-width: 70ch; font-size: 1.05rem; }
+  th, td { text-align: left; padding: .85rem 1.1rem; border-bottom: 1px solid var(--line); }
+  th { font-family: var(--mono); font-size: .8rem; text-transform: uppercase; letter-spacing: .12em; color: var(--wa); font-weight: 600; }
+  td strong { color: var(--paper); }
+
+  /* code */
+  pre {
+    background: #07110c; border: 1px solid var(--line); border-radius: 14px;
+    padding: 1.4rem 1.6rem; overflow:auto; max-width: 80ch;
+    font-family: var(--mono); font-size: 1rem; line-height: 1.65; color: #cfe9d8;
+  }
+  pre .k { color: var(--gold); } pre .s { color: var(--wa); } pre .c { color: var(--muted); }
+
+  .flow { display:flex; flex-direction: column; gap: .9rem; counter-reset: step; max-width: 64ch; }
+  .flow .step { display:flex; gap: 1rem; align-items:flex-start; }
+  .flow .step .n {
+    flex: 0 0 auto; width: 34px; height: 34px; border-radius: 50%;
+    border: 1px solid var(--wa); color: var(--wa); font-family: var(--mono);
+    display: grid; place-items: center; font-size: .9rem;
+  }
+  .flow .step p { font-size: 1.1rem; }
+
+  .ok { color: var(--wa); } .no { color: #ff7a7a; }
+
+  /* chrome */
+  .brandmark { position: fixed; top: 4vh; left: 9vw; font-family: var(--mono); font-size:.78rem; letter-spacing:.2em; color: var(--muted); text-transform: uppercase; }
+  .brandmark b { color: var(--wa); }
+  .slide-counter { position: fixed; bottom: 3.5vh; left: 9vw; font-family: var(--mono); font-size:.8rem; color: var(--muted); }
+  .slide-counter #current { color: var(--paper); }
+  .nav-hint { position: fixed; bottom: 3.5vh; right: 9vw; font-family: var(--mono); font-size:.75rem; color: var(--muted); opacity:.6; }
+  .progress { position: fixed; top:0; left:0; height: 3px; background: linear-gradient(90deg,var(--wa),var(--wa-deep)); width:0; transition: width .4s ease; z-index: 5; }
+
+  @media (max-width: 760px) {
+    .cols { grid-template-columns: 1fr; gap: 1.5rem; }
+    .cover .glyph { display: none; }
+  }
+
+  @media print {
+    .slide { page-break-after: always; display: flex !important; position: relative; height: 100vh; }
+    .brandmark, .slide-counter, .nav-hint, .progress { display: none; }
+    .slide-deck::after { display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="brandmark"><b>◆</b> Infinys WhatsApp Gateway</div>
+
+<div class="slide-deck" id="deck">
+
+  <!-- 1 COVER -->
+  <section class="slide cover active">
+    <span class="kicker">Odoo 19 · Community Edition</span>
+    <h1>Infinys<br>WhatsApp Gateway</h1>
+    <div class="divider"></div>
+    <p class="lead">Kirim notifikasi WhatsApp satu arah langsung dari Odoo — pengingat, peringatan, dan status sistem, tanpa integrasi rumit.</p>
+    <p class="meta">Infinys System Indonesia · integra.isi.id</p>
+    <div class="glyph"><span>💬</span></div>
+  </section>
+
+  <!-- 2 PROBLEM -->
+  <section class="slide">
+    <span class="kicker">Masalah</span>
+    <h2>Notifikasi penting sering terlewat</h2>
+    <div class="divider"></div>
+    <ul>
+      <li><span class="em">📭</span> Email pengingat & peringatan kerap tak terbaca tepat waktu.</li>
+      <li><span class="em">📈</span> WhatsApp punya tingkat keterbacaan jauh lebih tinggi.</li>
+      <li><span class="em">🧩</span> Tim butuh cara mudah mengirim notifikasi WA dari Odoo.</li>
+    </ul>
+  </section>
+
+  <!-- 3 SOLUTION -->
+  <section class="slide">
+    <span class="kicker">Solusi</span>
+    <h2>Gateway satu arah, terintegrasi penuh</h2>
+    <div class="divider"></div>
+    <ul class="plain">
+      <li>Kirim pesan teks &amp; media langsung dari Odoo.</li>
+      <li>Penjadwalan otomatis lewat <em>scheduler</em>.</li>
+      <li>Semua pesan tercatat untuk audit &amp; analisis.</li>
+    </ul>
+  </section>
+
+  <!-- 4 FEATURES -->
+  <section class="slide">
+    <span class="kicker">Fitur Utama</span>
+    <h2>Apa yang Anda dapat</h2>
+    <div class="grid">
+      <div class="card"><span class="em">💬</span><h3>Pesan Teks</h3><p>Satu arah, langsung dari Odoo.</p></div>
+      <div class="card"><span class="em">🖼️</span><h3>Media</h3><p>Gambar, video, audio, dokumen.</p></div>
+      <div class="card"><span class="em">⏱️</span><h3>Terjadwal</h3><p>Cron, batch 20 pesan/menit.</p></div>
+      <div class="card"><span class="em">📋</span><h3>Outbox Log</h3><p>Riwayat lengkap untuk kepatuhan.</p></div>
+      <div class="card"><span class="em">🔌</span><h3>Mudah Diintegrasi</h3><p>Model <code>infinys.wapi.outbox</code>.</p></div>
+      <div class="card"><span class="em">✅</span><h3>Nomor Tervalidasi</h3><p>Format dibersihkan otomatis.</p></div>
+    </div>
+  </section>
+
+  <!-- 5 HOW IT WORKS -->
+  <section class="slide">
+    <span class="kicker">Cara Kerja</span>
+    <h2>Dari Odoo ke WhatsApp</h2>
+    <div class="divider"></div>
+    <div class="flow">
+      <div class="step"><span class="n">1</span><p><strong>Settings</strong> menyimpan kredensial WAPI: URL, user, token, nomor pengirim.</p></div>
+      <div class="step"><span class="n">2</span><p><strong>Outbox</strong> menampung pesan dengan status <code>is_queued</code>.</p></div>
+      <div class="step"><span class="n">3</span><p><strong>Cron</strong> memproses antrian dan memanggil <strong>WhatsApp API</strong>.</p></div>
+      <div class="step"><span class="n">4</span><p>Status record diperbarui: <code>is_delivered</code>, <code>sent_date</code>, atau <code>error_msg</code>.</p></div>
+    </div>
+  </section>
+
+  <!-- 6 TWO MODES -->
+  <section class="slide">
+    <span class="kicker">Pengiriman</span>
+    <h2>Dua mode kirim</h2>
+    <div class="divider"></div>
+    <table>
+      <tr><th>Mode</th><th>Perilaku</th><th>Kapan</th></tr>
+      <tr><td><strong>Send</strong></td><td>Masuk antrian, dikirim scheduler</td><td>Massal / terjadwal</td></tr>
+      <tr><td><strong>Send Immediate</strong></td><td>Kirim seketika</td><td>Mendesak / pengujian</td></tr>
+    </table>
+  </section>
+
+  <!-- 7 PHONE FORMAT -->
+  <section class="slide">
+    <span class="kicker">Format Nomor</span>
+    <h2>Internasional, digit saja</h2>
+    <p class="lead">Tanpa <code>+</code> dan <code>-</code>. Dinormalkan otomatis saat input &amp; simpan.</p>
+    <table>
+      <tr><th>Input</th><th>Disimpan</th><th>Status</th></tr>
+      <tr><td>+62 817-6057-749</td><td>628176057749</td><td><span class="ok">✅ valid</span></td></tr>
+      <tr><td>628176057749</td><td>628176057749</td><td><span class="ok">✅ valid</span></td></tr>
+      <tr><td>08176057749</td><td>08176057749</td><td><span class="no">✕ ditolak</span></td></tr>
+    </table>
+  </section>
+
+  <!-- 8 MESSAGE FORMAT -->
+  <section class="slide">
+    <span class="kicker">Format Pesan</span>
+    <h2>HTML → gaya WhatsApp</h2>
+    <div class="divider"></div>
+    <div class="cols tight">
+      <ul class="plain">
+        <li><strong>Tebal</strong> → <code>*tebal*</code></li>
+        <li><em>Miring</em> → <code>_miring_</code></li>
+        <li>Daftar → <code>• item</code></li>
+        <li>Tautan → <code>teks (url)</code></li>
+      </ul>
+      <p class="lead">Tulis normal di editor Odoo; konversi terjadi otomatis sebelum kirim. Tag &amp; style sisa dibersihkan, spasi dirapikan.</p>
+    </div>
+  </section>
+
+  <!-- 9 ARCHITECTURE -->
+  <section class="slide">
+    <span class="kicker">Arsitektur</span>
+    <h2>Struktur modul</h2>
+    <div class="grid">
+      <div class="card"><h3>models/</h3><p><code>wapi_outbox</code> (inti) &amp; <code>res_config_settings</code> (kredensial).</p></div>
+      <div class="card"><h3>controllers/</h3><p>Endpoint health check publik.</p></div>
+      <div class="card"><h3>utils/</h3><p>Normalisasi nomor &amp; konversi HTML.</p></div>
+      <div class="card"><h3>views/</h3><p>List, form, settings, menu.</p></div>
+      <div class="card"><h3>data/</h3><p>Scheduled action (cron).</p></div>
+      <div class="card"><h3>security/</h3><p>Hak akses model.</p></div>
+    </div>
+    <p class="lead" style="margin-top:1.4rem">Odoo 19 · Python 3.12+ · depends: <code>base</code>, <code>mail</code></p>
+  </section>
+
+  <!-- 10 INSTALL -->
+  <section class="slide">
+    <span class="kicker">Instalasi</span>
+    <h2>Lima langkah</h2>
+    <div class="divider"></div>
+    <div class="flow">
+      <div class="step"><span class="n">1</span><p>Salin modul ke folder <code>addons</code> Odoo.</p></div>
+      <div class="step"><span class="n">2</span><p>Pastikan <code>addons_path</code> benar di <code>odoo.conf</code>.</p></div>
+      <div class="step"><span class="n">3</span><p>Restart Odoo &amp; <strong>Update Apps List</strong>.</p></div>
+      <div class="step"><span class="n">4</span><p>Apps → cari <strong>"Infinys"</strong> → <strong>Install</strong>.</p></div>
+      <div class="step"><span class="n">5</span><p>Settings → panel <strong>Infinys Whatsapp</strong> → isi kredensial → <strong>Check Health</strong>.</p></div>
+    </div>
+  </section>
+
+  <!-- 11 INTEGRATION -->
+  <section class="slide">
+    <span class="kicker">Integrasi</span>
+    <h2>Panggil dari modul lain</h2>
+    <div class="divider"></div>
+<pre><span class="c"># buat record outbox lalu kirim seketika</span>
+self.env[<span class="s">'infinys.wapi.outbox'</span>].<span class="k">create</span>({
+    <span class="s">'name'</span>: <span class="s">'Order Confirmation'</span>,
+    <span class="s">'phone'</span>: <span class="s">'+62 817-6057-749'</span>,   <span class="c"># → 628176057749</span>
+    <span class="s">'message'</span>: <span class="s">'&lt;b&gt;Order #SO001&lt;/b&gt; dikonfirmasi.'</span>,
+    <span class="s">'module_name'</span>: <span class="s">'sale'</span>,
+}).<span class="k">send_message_immediate</span>()</pre>
+    <p class="lead" style="margin-top:1.2rem">Nomor dibersihkan otomatis; HTML dikonversi ke gaya WhatsApp.</p>
+  </section>
+
+  <!-- 12 THANK YOU -->
+  <section class="slide cover">
+    <span class="kicker">Terima Kasih</span>
+    <h1>Mari mulai<br>mengirim.</h1>
+    <div class="divider"></div>
+    <p class="lead">Hubungi Tim Odoo Infinys untuk mendapatkan WhatsApp API tenant.</p>
+    <p class="meta">🌐 integra.isi.id · Infinys System Indonesia</p>
+    <div class="glyph"><span>🚀</span></div>
+  </section>
+
+</div>
+
+<div class="slide-counter"><span id="current">1</span> / <span id="total"></span></div>
+<div class="nav-hint">← → · klik · F layar penuh</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  document.getElementById('total').textContent = total;
+  const progress = document.getElementById('progress');
+
+  function show(n) {
+    slides[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+    document.getElementById('current').textContent = current + 1;
+    progress.style.width = ((current + 1) / total * 100) + '%';
+  }
+  show(0);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(current + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(current - 1); }
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(total - 1);
+    if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+      else document.exitFullscreen?.();
+    }
+    if (e.key === 'Escape') document.exitFullscreen?.();
+  });
+
+  document.getElementById('deck').addEventListener('click', (e) => {
+    if (e.target.closest('pre')) return; // jangan ganti slide saat klik di blok kode
+    (e.clientX / window.innerWidth > 0.5) ? show(current + 1) : show(current - 1);
+  });
+</script>
+</body>
+</html>

@@ -1,16 +1,13 @@
-import re
-import json
+# -*- coding: utf-8 -*-
 import logging
-from curses import raw
-from datetime import datetime
+
 from odoo import http
 from odoo.http import request
-from ..utils import texttohtml_utils
 
 _logger = logging.getLogger(__name__)
-_texttohtml_utils = texttohtml_utils
 
-#API V1 Whatsapp Controller 
+
+# API V1 Whatsapp Controller
 class WuzapiController(http.Controller):
 
     @http.route('/api/wapi/wuzapi/health', type='json', auth='public', methods=['POST'], csrf=False)
@@ -22,6 +19,7 @@ class WuzapiController(http.Controller):
         except Exception as e:
             _logger.error("WAPI Health Check Error: %s", e)
             return error_response(e, "Failed to check WAPI health.")
+
 
 def error_response(error, msg):
     return {
@@ -36,15 +34,16 @@ def error_response(error, msg):
                 "debug": "",
                 "message": msg,
                 "arguments": list(error.args),
-                "exception_type": type(error).__name__
-            }
-        }
+                "exception_type": type(error).__name__,
+            },
+        },
     }
 
-def success_response(id,data):
+
+def success_response(id, data):
     return {
         "jsonrpc": "2.0",
         "id": id,
         "status": "success",
-        "result": data
+        "result": data,
     }

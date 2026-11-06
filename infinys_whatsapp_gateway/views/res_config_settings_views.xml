@@ -16,7 +16,7 @@
                                 </div>
                                 <div class="row mt8">
                                     <label for="wapi_phone_number" string="Phone Number" class="col-lg-3 o_light_label"/>
-                                    <field name="wapi_phone_number" widget="phone" />
+                                    <field name="wapi_phone_number" widget="phone" placeholder="e.g. 628176057749"/>
                                 </div>
                             </div>
                         </setting>
@@ -32,10 +32,10 @@
                                 </div>
                             </div>
                             <div class="mt16">
-                                <button name="action_wapi_check_health" 
-                                        type="object" 
-                                        string="Check Health" 
-                                        class="btn-primary" 
+                                <button name="action_wapi_check_health"
+                                        type="object"
+                                        string="Check Health"
+                                        class="btn-primary"
                                         icon="fa-heartbeat"/>
                             </div>
                         </setting>

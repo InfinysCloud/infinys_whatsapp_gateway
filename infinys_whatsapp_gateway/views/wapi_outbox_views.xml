@@ -30,8 +30,8 @@
                     <group>
                         <group name="main_info">
                             <field name="name"/>
-                            <field name="phone" widget="phone" options="{'enable_sms': True}"/>
-                            <field name="attachment_id" widget="many2many_binary" options="{'accepted_file_extensions': 'image/jpeg, image/png, image/gif,video/mp4, video/3gp, application/pdf, application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.openxmlformats-officedocument.presentationml.presentation', 'number_of_files': 1}" />
+                            <field name="phone" widget="phone" placeholder="e.g. 628176057749" options="{'enable_sms': True}"/>
+                            <field name="attachment_id" widget="many2many_binary" options="{'accepted_file_extensions': 'image/jpeg, image/png, image/gif,video/mp4, video/3gp, application/pdf, application/msword, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.openxmlformats-officedocument.presentationml.presentation', 'number_of_files': 1}"/>
                             <field name="scheduled_date"/>
                         </group>
                         <group name="status_info">
@@ -52,14 +52,13 @@
                         </page>
                         <page string="Media" name="media" invisible="not hasmedia">
                             <group>
-                                
                                 <field name="hasmedia" readonly="1"/>
                                 <field name="media_url" readonly="1"/>
                                 <field name="media_filename" readonly="1"/>
-                                <field name="media_mime_type" readonly="1"/>    
+                                <field name="media_mime_type" readonly="1"/>
                             </group>
                             <group>
-                                <field name="media_base64"></field>
+                                <field name="media_base64"/>
                             </group>
                         </page>
                         <page string="Technical Details" name="technical">
